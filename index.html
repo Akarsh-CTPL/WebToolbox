@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Toolbox | Akarsh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-purple: #4e2d87;
+            --light-purple: #f0e7ff;
+            --ghost-purple: rgba(240, 231, 255, 0.15); /* Very light for the animation */
+            --bg-gray: #f8f9fa;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 20px 40px rgba(78, 45, 135, 0.15);
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: #333;
+        }
+
+        /* Info Button Styling */
+        .info-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .info-btn:hover {
+            background: white;
+            color: var(--primary-purple);
+            transform: rotate(15deg);
+        }
+
+        /* Hero Layout */
+        .hero {
+            background: var(--primary-purple);
+            color: white;
+            padding: 100px 20px 140px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Animation Styling (Left Side) */
+        .animation-zone {
+            flex: 1;
+            max-width: 450px;
+            height: 350px;
+            position: relative;
+            opacity: 0.3; /* Ghost effect */
+            filter: drop-shadow(0 0 10px rgba(240, 231, 255, 0.3)); /* Soft Glow */
+        }
+
+        .hero-content {
+            flex: 1.2;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            opacity: 0.85;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        /* Modular Tool Grid */
+        .container-tools {
+            max-width: 1100px;
+            margin: -50px auto 80px;
+            padding: 0 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 28px;
+            padding: 45px 35px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #240c4eaf;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: var(--primary-purple);
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: var(--light-purple);
+            color: var(--primary-purple);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .tool-card:hover .icon-wrapper {
+            background: var(--primary-purple);
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding-bottom: 50px;
+            color: #bbb;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        /* Modal Customization */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            padding: 10px;
+        }
+        .modal-header { border: none; }
+        .modal-footer { border: none; }
+        .modal-title { font-weight: 800; color: var(--primary-purple); }
+        .info-list { list-style: none; padding: 0; font-size: 14px; }
+        .info-list li { margin-bottom: 10px; display: flex; gap: 10px; align-items: start; }
+        .info-list i { color: var(--primary-purple); }
+
+        /* --- CODING LAPTOP SVG ANIMATION CLASSES --- */
+        .a-light { fill: var(--light-purple); }
+        .a-ghost { fill: var(--ghost-purple); opacity: 0.5; }
+        
+        @keyframes fadeInLeft { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
+
+        .line1, .line2, .line3, .line4, .line5, .line6 { opacity: 0; animation: fadeInLeft both 1s; }
+        
+        .line1 { animation-delay: 0.4s; animation: fadeInLeft both 1s 0.4s, coding1 ease 6s 4s infinite; }
+        .line2 { animation-delay: 0.6s; animation: fadeInLeft both 1s 0.6s, coding2 ease 6s 4s infinite; }
+        .line3 { animation-delay: 0.8s; animation: fadeInLeft both 1s 0.8s, coding3 ease 6s 4s infinite; }
+        .line4 { animation-delay: 1.0s; animation: fadeInLeft both 1s 1.0s, coding4 ease 6s 4s infinite; }
+        .line5 { animation-delay: 1.2s; animation: fadeInLeft both 1s 1.2s, coding5 ease 6s 4s infinite; }
+        .line6 { animation-delay: 1.4s; animation: fadeInLeft both 1s 1.4s, coding6 ease 6s 4s infinite; }
+
+        @keyframes coding1 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 14% { transform: translate(0, -10px); opacity: 0; } 15% { transform: translate(0, 45px); } 30% { transform: translate(0, 40px); opacity: 1; } }
+        @keyframes coding2 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 29% { transform: translate(0, -10px); opacity: 0; } 30% { transform: translate(0, 40px); } 45% { transform: translate(0, 30px); opacity: 1; } }
+        @keyframes coding3 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 44% { transform: translate(0, -20px); opacity: 0; } 45% { transform: translate(0, 30px); } 60% { transform: translate(0, 20px); opacity: 1; } }
+        @keyframes coding4 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 59% { transform: translate(0, -30px); opacity: 0; } 60% { transform: translate(0, 20px); } 75% { transform: translate(0, 10px); opacity: 1; } }
+        @keyframes coding5 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 74% { transform: translate(0, -40px); opacity: 0; } 75% { transform: translate(0, 10px); } 90% { transform: translate(0, 5px); opacity: 1; } }
+        @keyframes coding6 { 0%, 100% { transform: translate(0, 0); opacity: 1; } 89% { transform: translate(0, -50px); opacity: 0; } 90% { transform: translate(0, 10px); } 100% { transform: translate(0, 0); opacity: 1; } }
+
+        @media (max-width: 992px) {
+            .hero-container { flex-direction: column-reverse; text-align: center; gap: 30px; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-content { text-align: center; }
+            .hero p { margin: 0 auto; }
+            .animation-zone { width: 100%; max-width: 300px; height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-btn" data-bs-toggle="modal" data-bs-target="#infoModal">
+        <i class="bi bi-info-lg"></i>
+    </div>
+
+    <header class="hero">
+        <div class="hero-container">
+            <div class="animation-zone">
+                <svg id="icon4" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                    <g id="line1" class="line1">
+                        <rect x="39" y="45" class="a-light" width="9" height="2" />
+                        <rect x="70" y="49" class="a-ghost" width="11" height="2" />
+                        <rect x="83" y="49" class="a-ghost" width="16" height="2" />
+                        <rect x="43" y="49" class="a-ghost" width="25" height="2" />
+                    </g>
+                    <g id="line2" class="line2">
+                        <rect x="90" y="53" class="a-ghost" width="14" height="2" />
+                        <rect x="63" y="53" class="a-ghost" width="25" height="2" />
+                        <rect x="43" y="53" class="a-ghost" width="18" height="2" />
+                        <rect x="57" y="57" class="a-ghost" width="22" height="2" />
+                        <rect x="43" y="57" class="a-ghost" width="12" height="2" />
+                    </g>
+                    <g id="line3" class="line3">
+                        <rect x="39" y="61" class="a-light" width="9" height="2" />
+                        <rect x="39" y="65" class="a-light" width="15" height="2" />
+                    </g>
+                    <g id="line4" class="line4">
+                        <rect x="46" y="69" class="a-ghost" width="10" height="2" />
+                        <rect x="58" y="69" class="a-ghost" width="43" height="2" />
+                        <rect x="103" y="69" class="a-ghost" width="9" height="2" />
+                        <rect x="78" y="73" class="a-ghost" width="38" height="2" />
+                        <rect x="52" y="73" class="a-ghost" width="24" height="2" />
+                    </g>
+                    <g id="line5" class="line5">
+                        <rect x="103" y="81" class="a-ghost" width="13" height="2" />
+                        <rect x="76" y="81" class="a-ghost" width="25" height="2" />
+                        <rect x="56" y="81" class="a-ghost" width="18" height="2" />
+                        <rect x="89" y="77" class="a-ghost" width="10" height="2" />
+                        <rect x="61" y="77" class="a-ghost" width="26" height="2" />
+                        <rect x="52" y="77" class="a-ghost" width="7" height="2" />
+                    </g>
+                    <g id="line6" class="line6">
+                        <rect x="46" y="89" class="a-ghost" width="11" height="2" />
+                        <rect x="52" y="85" class="a-ghost" width="10" height="2" />
+                        <rect x="64" y="85" class="a-ghost" width="19" height="2" />
+                        <rect x="85" y="85" class="a-ghost" width="19" height="2" />
+                        <rect x="59" y="89" class="a-ghost" width="6" height="2" />
+                    </g>
+                    <g id="computer">
+                        <path class="a-ghost" d="M128,108H12V26h116V108z M14,106h112V28H14V106z" />
+                        <path class="a-ghost" d="M122,102H18V32h104V102z M20,100h100V34H20V100z" />
+                        <rect x="20" y="34" class="a-light" width="100" height="7" style="opacity:0.3;" />
+                        <path class="a-ghost" d="M138,115H2v-9h136V115z M4,113h132v-5H4V113z" />
+                        <circle fill="#FFFFFF" cx="24.5" cy="37.5" r="1.5" style="opacity:0.8;"/>
+                        <circle fill="#FFFFFF" cx="29.5" cy="37.5" r="1.5" style="opacity:0.8;"/>
+                        <circle fill="#FFFFFF" cx="34.5" cy="37.5" r="1.5" style="opacity:0.8;"/>
+                        <rect x="20" y="41" class="a-light" width="15" height="59" style="opacity:0.1;"/>
+                        <path class="a-ghost" d="M84,111H56v-5h28V111z M58,109h24v-1H58V109z" />
+                        <circle class="a-ghost" cx="72" cy="30" r="1" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="hero-content">
+                <div class="status-badge">CTPL INTERNAL SYSTEMS</div>
+                <h1>Web Toolbox</h1>
+                <p>
+                    Specialized production utilities for the CTPL team. 
+                    Active as a production bridge while our main integrated systems remain in development.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-tools">
+        <div class="tool-grid">
+            <a href="installation-certificate.html" class="tool-card">
+                <div class="icon-wrapper"><i class="bi bi-file-earmark-check"></i></div>
+                <h3>Certificates</h3>
+                <p>Generate professional PDF installation and fitment certificates with RTO compliance.</p>
+            </a>
+            <a href="planCalculator.html" class="tool-card">
+                <div class="icon-wrapper"><i class="bi bi-calendar3"></i></div>
+                <h3>Plan Calculator</h3>
+                <p>Execute precise RC eligibility checks and validity calculations based on official registration rules.</p>
+            </a>
+            <a href="custom-labels.html" class="tool-card">
+                <div class="icon-wrapper"><i class="bi bi-qr-code-scan"></i></div>
+                <h3>SLD Labels</h3>
+                <p>Bulk generate serial labels, QR codes, and IMEI stickers for SLD hardware units.</p>
+            </a>
+        </div>
+    </main>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Toolbox Guide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <!-- <h6 class="fw-bold mb-2" style="color: var(--primary-purple); font-size: 13px; letter-spacing: 1px;">THE MISSION</h6> -->
+                        <p class="text-muted small mb-0">Tools designed to ease manual processes </p>
+                    </div>
+                
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-2" style="color: var(--primary-purple); font-size: 13px; letter-spacing: 1px;">AVAILABLE UTILITIES</h6>
+                        <ul class="info-list small">
+                            <li><i class="bi bi-file-earmark-text"></i> <span><strong>Certificates:</strong> RTO compliant PDF generator.</span></li>
+                            <li><i class="bi bi-calculator"></i> <span><strong>Calculator:</strong> Smart 8-year validity checker.</span></li>
+                            <li><i class="bi bi-tag"></i> <span><strong>Labels:</strong> Bulk ETL/MTL/IMEI generator.</span></li>
+                        </ul>
+                    </div>
+                
+                    <div>
+                        <h6 class="fw-bold mb-2" style="color: var(--primary-purple); font-size: 13px; letter-spacing: 1px;">SELF-SERVICE POLICY</h6>
+                        <ul class="info-list small">
+                            <li><i class="bi bi-lightning-charge"></i> <span>Don't wait for manual processing; tools are instant.</span></li>
+                            <li><i class="bi bi-arrow-clockwise"></i> <span>Bug? Just refresh the page to reset the logic.</span></li>
+                            <li><i class="bi bi-cpu"></i> <span>Production bridge while the Main App is in development.</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary w-100" style="background: var(--primary-purple); border:none; border-radius: 10px;" data-bs-dismiss="modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        CTPL INTERNAL SYSTEMS • DEVELOPED BY AKARSH @ CTPL • 2026
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

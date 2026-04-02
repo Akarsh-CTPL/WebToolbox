@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 30px;
+    background: white;
+}
+.certificate-container {
+    border: 2px solid black;
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+    background: white;
+}
+.page-break {
+    page-break-before: always;
+    display: block;
+    height: 10px;
+}
+.image-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #000;
+    margin: 5px;
+}

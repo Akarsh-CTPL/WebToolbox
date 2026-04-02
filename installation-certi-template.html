@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Templates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+        }
+        .certificate-page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            /* border: 1px solid #000; */
+            background: #fff;
+            margin-bottom: 20px;
+            position: relative;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 6pt;
+            text-align: justify;
+        }
+        .header-img, .footer-img {
+            
+            height: auto;
+            position: absolute;
+            left: 0;
+            
+        }
+        .header-img {
+            top: 3mm;
+            width: 90%;
+        }
+        .footer-img {
+            bottom: 0;
+            width: 100%;
+        }
+        .content {
+            padding-top: 80px;
+            padding-bottom: 40mm; 
+        }
+        .certificate-container {
+            border: 2px solid black;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            letter-spacing: -0.1px;
+            
+        }
+        th, td {
+            border: 0.3px solid rgba(0, 0, 0, 0.505);
+            padding: 2px;
+            text-align: left;
+            line-height: 1;
+        }
+       
+        .section-break {
+            border-top: 2px dashed black;
+            margin: 20px 0; 
+        }
+        ul {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            li {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 2px; 
+            }
+
+            li i {
+                margin-right: 8px; 
+                flex-shrink: 0; 
+            }
+        .stamp-img {
+            width: 70px; 
+            height: auto;
+            padding-left: 10px;
+            margin-left: 30px;
+        }
+        .sign-img{
+            width: 100px; 
+            height: auto;
+
+        }
+        .image-preview {
+            width: 130px;  
+            height: 130px; 
+            margin-top: 5px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-left: 10%;
+
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Ensures full image is shown without cropping */
+        }
+
+        .qr-code {
+            width: 50px;
+            height: 50px;
+        }
+        .department-box {
+            border: 1px solid black;
+            padding: 5px 40px;
+            font-weight: bold;
+            display: inline-block;
+            font-size: 9pt;
+            margin-bottom: 0px;
+            
+        }
+        input[type="checkbox"] {
+            vertical-align: middle;
+            
+        }
+
+        .certification-text {
+            margin-top: 15px;
+            text-align: justify;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                padding-top: 1mm;
+                width: 210mm;
+                height: 297mm;
+                page-break-after: always;
+            }
+            .certificate-container {
+                width: 100%;
+                height: 100%;
+                border: none; 
+                padding: 0;
+                margin: 0;
+            }
+        }
+       
+
+        
+
+    </style>
+</head>
+<body>
+<!------------------------------------ Page 1 -------------------------------------------------->
+    <div class="certificate-page" id="installationCertificate" style="font-size: 9pt;">
+        <img src="assets\img\header-p1.png" class="header-img" alt="Header">
+        <div class="content" style="margin-top: 3rem;">
+            <div class="container mt-3" >
+                <img src="assets/img/qr-page1.png" alt="" style="position: absolute; bottom: 240px; left: 40px; width: 100px; height: 100px;">
+                <div class="row">
+                    <!-- Left Section -->
+                    <div class="col-md-9">
+                
+                        <p class="mt-2">
+                            <strong>To,</strong> <br>
+                            <strong><span >The R.T.O. / J.R.T.O</span></strong> <br>
+                            <strong><span class="stateCode"></span></strong> <br>
+                            <strong><span class="stateName"></span></strong> 
+                            
+                        </p>
+                    </div>
+            
+                    <!-- Right Section -->
+                    <div class="col-md-3 text-end">                       
+                        <div class="mt-2">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                <tr>
+                                    <th style="width: 15%; border: 1px solid #ffffff;">Dated :</th>
+                                    <td style="width: 20%; border: 1px solid #ffffff;"class="dated"></td>
+                                    
+                                </tr>                               
+                            </table>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>
+                This is to certify that the following vehicle has been fitted with an approved Containe Motoreye/Limits Electronic Speed Limiter,
+                set to a maximum speed of <span class="setSpeed"></span>(+/-2%). It shall not exceed this speed under any circumstances unless the device is tampered 
+                with or the seal is broken by an unauthorized technician or individual.
+            </p>
+
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+
+                <tr>
+                    <!-- VEHICLE DETAILS header -->
+                    <th colspan="2" style="padding: 5px; font-size: 11pt; color: red; text-align: center;">
+                        VEHICLE DETAILS
+                    </th>
+                
+                    <!-- QR Code column (unchanged) -->
+                    <td rowspan="9" style="width: 9%; text-align: center; vertical-align: middle;">
+                        <!-- QR Code can be inserted here -->
+                    </td>
+                
+                    <!-- SLD DETAILS header -->
+                    <th colspan="4" style="padding: 5px; font-size: 11pt; color: red; text-align: center;">
+                        SLD DETAILS
+                    </th>
+                </tr>
+                
+                
+                <tr>
+                    
+                    <th style="width: 15%; padding: 5px;">Make & Model</th>
+                    <td style="width: 23%;" class="makeModel"></td>   
+                    <th style="width: 15%;">Model</th>
+                    <td style="width: 12%;" >CTZESGM09</td>
+                    <th style="width: 10%;">Part No</th>
+                    <td style="width: 12%;" >CTZESGPT09</td>
+                </tr>
+                <tr>
+                    <th style="padding: 5px;">Reg No. & Date</th>
+                    <td ><span class="regNo"> </span> &nbsp;&#38&nbsp; <span class="regdate"></span></td>
+                    <th >SLD No</th>
+                    <td class="sldNo"></td>
+                    <th>TAC No</th>
+                    <td >AA1835</td>
+                </tr>
+                <tr>
+                    <th style="padding: 5px;">RC</th>
+                    <td class="rc"></td>
+                    <th >Set Speed</th>
+                    <td class="setSpeed"></td>
+                    <th>Voltage</th>
+                    <td >12/24</td>
+                </tr>
+                <tr>
+                    <th style="padding: 5px;">Engine No</th>
+                    <td class="engineNo"></td>
+                    <th>Invoice No</th>
+                    <td class="invoiceNo"></td>
+                    <th>Dated</th>
+                    <td class="dated"></td>
+                </tr>
+                <tr>
+                    <th style="padding: 5px;">Chassis No</th>
+                    <td class="chassisNo"></td>
+                    <th></th>
+                    <td></td>
+                    <th></th>
+                    <td></td>
+                    
+                </tr>
+                <tr>
+                    <th style="padding: 5px;">Kilometer</th>
+                    <td class="kilometer"></td>
+                    <th></th>
+                    <td></td>
+                    <th></th>
+                    <td></td>
+                </tr>
+                
+            </table>
+
+            <p style="margin-top: 30px; margin-bottom: 30px ;">Containe Motoreye Electronic Speed Limiter Serial No: <strong><u><span class="serialNo"></span></u></strong> Installation Date : <strong><span class="installationDate"></span></strong>  Renewal Due Date :  <strong><span class="renewalDate"></span></strong>. 
+                We have sealed this device at six certical points and the certificate is being issued only after testing.</p>
+            
+            
+
+            <p><strong>VALID FOR 1 YEAR ONLY FOR THE STATE OF <span class="stateName"></span></strong></p>
+
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tr>
+                    <th style="width: 10%;">Device Installed Date</th>
+                    <td style="width: 23%;" class="installationDate"></td>                    
+                    <td rowspan="5" style="width: 9%; text-align: center; vertical-align: middle; padding: 5px;">
+                        <p style="font-size: 8pt;">For <strong>Containe Technologies Limited</strong></p>
+                        <div class="d-flex justify-content-right align-items-center gap-3">
+                            <img src="assets\img\ctpl-stamp.png" alt="Stamp" class="stamp-img">
+                            <img src="assets\img\ctpl-sign.png" alt="Signature" class="sign-img">
+                        </div>
+                        <p><strong>Authorised Signature</strong></p>
+                    </td>
+                </tr>
+              
+                <tr>
+                    <th>Customer Name</th>
+                    <td class="customerName"></td>
+                    
+                </tr>
+                <tr>
+                    <th>Customer Address</th>
+                    <td class="address"></td>
+                    
+                </tr>
+                <tr>
+                    <th>Renewal Date</th>
+                    <td class="renewalDate"></td>
+                  
+                </tr>
+              
+            </table>
+
+            <div class="row align-items-end text-center" style="min-height: 100px; margin-top: 70px; ">
+            
+                <div class="col-md-4 d-flex align-items-end justify-content-right">
+                    <!-- <p><strong>Dealer Seal & Signature</strong></p> -->
+                </div>
+            
+                
+                <div class="col-md-4 d-flex align-items-end justify-content-center">
+                    <p><strong>Dealer Seal & Signature</strong></p>
+                </div>
+            
+                
+                <div class="col-md-4 text-end">
+                    <p><strong>Customer Signature </strong></p>
+                </div>
+            </div>
+        </div>
+            
+        
+        <img src="assets\img\footer.png" class="footer-img" alt="Footer">
+    </div>
+<!------------------------------------ Page 2 -------------------------------------------------->
+    <div class="certificate-page" id="warrantyCertificate">
+        <img src="assets\img\header-p2.png" class="header-img" alt="Header">
+        <div class="content">
+            <table border="1" style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 20px;">
+                <tr>
+                    <th style="width: 20%; padding: 4px;">Customer Name</th>
+                    <td style="width: 23%;" class="customerName"></td>
+                    <td rowspan="9" style="width: 9%; text-align: center; vertical-align: middle;">
+                        <!-- <img src="assets/img/qr-page2.png" alt="QR Code" style="width: 50px; height: 50px;"> -->
+                    </td>
+                    <th style="width: 17%; padding: 4px;">Model</th>
+                    <td style="width: 12%;" >CTZESGM09</td>
+                    <th style="width: 9%;">Part No</th>
+                    <td style="width: 12%;" >CTZESGPT09</td>
+                </tr>
+                <tr>
+                    <th style="padding: 4px;">Address</th>
+                    <td class="address"></td>
+                    <th>SLD No</th>
+                    <td class="sldNo"></td>
+                    <th>TAC No</th>
+                    <td >AA1835</td>
+                </tr>
+                <tr>
+                    <th style="padding: 4px;">Phone No.</th>
+                    <td class="phoneNo"></td>
+                    <th>Set Speed</th>
+                    <td class="setSpeed"></td>
+                    <th>Voltage</th>
+                    <td >12/24</td>
+                </tr>
+                <tr>
+                    <th style="padding: 4px;">Make & Model</th>
+                    <td class="makeModel"></td>
+                    <th>Invoice No</th>
+                    <td class="invoiceNo"></td>
+                    <th>Dated</th>
+                    <td class="dated"></td>
+                </tr>
+                <tr>
+                    <th style="padding: 4px;">Reg No. & Date</th>
+                    <td ><span class="regNo"></span>&#38 <span class="regdate"></span></td>
+                    <th>Installation Date</th>
+                    <td colspan="3" class="installationDate"></td>
+                </tr>
+                <tr>
+                    <th style="padding: 4px;">RC</th>
+                    <td class="rc"></td>
+                    <th>Renewal Date</th>
+                    <td colspan="3" class="renewalDate"></td>
+                </tr>
+                <tr>
+                    <th>Engine No</th>
+                    <td class="engineNo"></td>
+                    <td colspan="4" rowspan="3" style="height: 60px;"><strong>Customer Signature & Name</strong></td>
+                </tr>
+                <tr>
+                    <th>Chassis No</th>
+                    <td class="chassisNo"></td>
+                </tr>
+                <tr>
+                    <th>Kilometer</th>
+                    <td class="kilometer"></td>
+                </tr>
+            </table>
+            
+            
+
+            <div class="row" style="margin-top: 10px;">
+                <!-- Middle Section (Checkbox Grid) -->
+            <div class="row" style="margin-top: 10px;">
+                <!-- Left Section -->
+                <div class="col-md-4">
+                    <!-- <p>Fitted and Sealed at <span id="tickCount1">0</span> points:</p> -->
+                    <p>Fitted and Sealed at 6 points:</p>
+                </div>
+            
+                <!-- Middle Section (Checkbox Grid) -->
+                <div class="col-md-8 checkbox-container" style="padding-left: 0;">
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> Filter</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> FIP</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> Sensor</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-R</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-L</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-B</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI Front Cover</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI Back Cover</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> Engine ECU-EPI SLD Connector Sealing</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI SLD Device-Engine ECU</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> Vehicle Pedal-EPI SLD Connector Sealing</label>
+                </div>
+            </div>
+            </div>
+
+
+        <div class="section-break"></div>
+
+        <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <tr>
+                <th style="width: 20%; padding: 4px;">Customer Name</th>
+                <td style="width: 23%;" class="customerName"></td>
+                <td rowspan="9" style="width: 9%; text-align: center; vertical-align: middle;">
+                    <!-- <img src="assets/img/qr-page2.png" alt="QR Code" style="width: 50px; height: 50px;"> -->
+                </td>
+                <th style="width: 17%;">Model</th>
+                <td style="width: 12%;" >CTZESGM09</td>
+                <th style="width: 9%;">Part No</th>
+                <td style="width: 12%;" >CTZESGPT09</td>
+            </tr>
+            <tr>
+                <th style="padding: 4px;">Address</th>
+                <td class="address"></td>
+                <th>SLD No</th>
+                <td class="sldNo"></td>
+                <th>TAC No</th>
+                <td >AA1835</td>
+            </tr>
+            <tr>
+                <th style="padding: 4px;">Phone No.</th>
+                <td class="phoneNo"></td>
+                <th>Set Speed</th>
+                <td class="setSpeed"></td>
+                <th>Voltage</th>
+                <td >12/24</td>
+            </tr>
+            <tr>
+                <th style="padding: 4px;">Make & Model</th>
+                <td class="makeModel"></td>
+                <th>Invoice No</th>
+                <td class="invoiceNo"></td>
+                <th>Dated</th>
+                <td class="dated"></td>
+            </tr>
+            <tr>
+                <th style="padding: 4px;">Reg No. & Date</th>
+                <td ><span class="regNo"></span> : <span class="regdate"></td>
+                <th>Installation Date</th>
+                <td colspan="3" class="installationDate"></td>
+            </tr>
+            <tr>
+                <th style="padding: 4px;">RC</th>
+                <td class="rc"></td>
+                <th>Renewal Date</th>
+                <td colspan="3" class="renewalDate"></td>
+            </tr>
+            <tr>
+                <th>Engine No</th>
+                <td class="engineNo"></td>
+                <td colspan="4" rowspan="3" style="height: 60px;"><strong>Customer Signature & Name</strong></td>
+            </tr>
+            <tr>
+                <th>Chassis No</th>
+                <td class="chassisNo"></td>
+            </tr>
+            <tr>
+                <th>Kilometer</th>
+                <td class="kilometer"></td>
+            </tr>
+        </table>
+        
+
+        <div class="row" style="margin-top: 10px;">
+                   
+            <!-- Middle Section (Checkbox Grid) -->
+            <div class="row" style="margin-top: 10px;">
+                <!-- Left Section -->
+                <div class="col-md-4">
+                    <!-- <p>Fitted and Sealed at <span id="tickCount2">0</span> points:</p> -->
+                    <p>Fitted and Sealed at 6 points:</p>
+                </div>
+            
+                <!-- Middle Section (Checkbox Grid) -->
+                <div class="col-md-8 checkbox-container" style="padding-left: 0;">
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> Filter</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> FIP</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> Sensor</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-R</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-L</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()" checked> EFRT-B</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI Front Cover</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI Back Cover</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> Engine ECU-EPI SLD Connector Sealing</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> EPI SLD Device-Engine ECU</label>
+                    <label><input type="checkbox" class="tick-checkbox" onchange="updateTickCount()"> Vehicle Pedal-EPI SLD Connector Sealing</label>
+                </div>
+            </div>
+        </div>
+
+        <p ><strong>NOTE:</strong> Please send duly filled & Singed to the above address</p>    
+
+        <div class="container " style="padding-left: 0%;margin-top: 0px; font-size:5pt;">
+            <p style="font-weight: bold; margin-bottom: 0;">We Containe Technologies Limited. having registered office at # 3-13-142/ 314P & 342, Gokul Nagar, Marriguda, Mallapur, Secundrabad, Hyderabad - 500076, India do hereby 
+                Warrant that each of the Containe Motor eye Electronic Speed Limiter Here in after referred as “The product and parts there of manufactured by us will be free from defectin material and Workmanship Subject to the following terms and conditions</p>
+            <ul class="list-unstyled" style="margin-bottom: 0;">
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> The  Warranty Shall be for a period of 12 months from the date of Sale.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> This Warranty is not “ONSITE MAINTENANCE WARRANTY” and customer shall bring the vehicle fitted with this unit to the nearest dealer for corrective measures.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> Any Claims arising from this warranty shall be recognized only if it is notified in writing to us or to our Authorised dealer without any delay soon after such defect as covered and as certained under this Warranty.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> The products old by us has express warranty that it is free from the manufacturing defects in material and work ship of the product part or Components thereof and excludes all other Warranty conditions and liabilities what so ever. Whether express or implied.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> Our Obligation under this Warranty shall be limited to repairing or replacing free of charge such parts of the product which in our opinion are defective, on  the product being brought to us or to our dealers within the valid period. The parts so repaired or replaced shall be Warranted  for quality and workman ship but each Warranty shall be XO-terminus with this original Warranty.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> This Warranty shall not apply if the product or any part thereof is repaired or altered otherwise than in accordance with our standard repair procedure or by any person other than our sales or services establishments, our authorized dealers. Service center or service points in any so as in our judgement which shall be final and binding to affect is reliability nor shall it apply if in our opinion which shall be and binding the product is subject to misuse negligence improper or inadequate or accident or such services as prescribed in our manual and service book are not corned out by the buyer through our sales or service establishments of our authorized dealers, Service centers or service points. </li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> This Warranty Shall be null and void if the product is subjected to abnormal use. This Warranty shall not apply to any repair or replacements of the product as a result of accidents or Collision.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> The buyer of the product shall have no other rights excepts those sort out above and hence, in particular no rights to repudiate the said or any agreement or to claim/demand any damages or compensation for losses incidentals or inconvenience or consequential damages ,losses of the product or loss of time, or otherwise incurred or accrued.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> This warranty shall not apply to any repair or replacement of the product as a result of accidents or collisions.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> The buyer of the product shall have no other rights except those set out above and, in particular, no rights to repudiate the agreement or claim any damages or compensation for losses, incidental inconveniences, consequential damages, loss of the product, or loss of time.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> The warranty is subject to the jurisdiction of the Civil Court within the city limit of Hyderabad to the exclusion of all others Courts. Normal.</li>
+                <li class=""><i class="bi bi-caret-right-fill" style="color: red;"></i> Wear and tear as well as damages caused by improper use handling are not covered by the Warranty.</li>
+            </ul>
+            <p style="font-weight: bold;"> Warranty shall not apply if the product is in any way altered modified or interfered with by the buyer or other person or if the parts other than those manufactured by us are fitted there in and does not extend to by other part of the vehicle to which the product is fitted. Our general Terms and Conditions of sale apply.</p>
+        </div>
+        <!-- <img src="assets/img/qr-page2.png" alt="QR Code" style="width: 50px; height: 50px;"> -->
+        <img src="assets/img/qr-page2.png" alt="QR Code" style="position: absolute; bottom: 130px; left: 40px; width: 100px; height: 100px;">
+
+        <div class="row align-items-end text-center" style="min-height: 100px; ">
+            
+            <div class="col-md-4 d-flex align-items-end justify-content-center">
+              
+            </div>
+        
+            <!-- Customer Signature -->
+            <div class="col-md-4 d-flex align-items-end justify-content-center">
+                
+            </div>
+            
+        
+            <!-- Company Signature & Stamp -->
+            <div class="col-md-4 text-center">
+                <p>For <strong>Containe Technologies Limited</strong></p>
+                <div class="d-flex justify-content-right align-items-center gap-3">
+                    <img src="assets\img\ctpl-stamp.png" alt="Stamp" class="stamp-img">
+                    <img src="assets\img\ctpl-sign.png" alt="Signature" class="sign-img">
+                </div>
+                <p><strong>Authorised Signature</strong></p>
+            </div>
+        </div>
+
+
+
+        
+
+        
+
+        </div>
+        <img src="assets\img\footer.png" class="footer-img" alt="Footer">
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<!------------------------------------ Page 3 -------------------------------------------------->
+    <div class="certificate-page" id="fitmentCertificate">
+        <img src="assets\img\header-p3.png" class="header-img" alt="Header">
+        <div class="content">
+            <img src="assets/img/qr-page1.png" alt="" style="position: absolute; bottom: 200px; left: 50px; width: 100px; height: 100px;">
+
+            <div class="container mt-3">
+            <div class="row">
+                <!-- Left Section -->
+                <div class="col-md-8">
+                    <!-- <img src="assets\img\qr-page3.png" alt="QR Code" class="qr-code"> -->
+                    <p class="mt-2">
+                        <strong>To,</strong> <br>
+                        The Regional Transport Authority, <br>
+                        <span class="stateCode"></span><br>
+                        <span class="stateName"></span> 
+                    </p>
+                </div>
+        
+                <!-- Right Section -->
+                <div class="col-md-4 text-end">
+                    <div class="department-box">DEPARTMENT COPY</div>
+                    <div class="mt-2">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tr>
+                                <th style="width: 15%; border: 1px solid #ffffff;">Fitment Certificate No.</th>
+                                <td style="width: 20%; border: 1px solid #ffffff;"  class="fitmentcerti"></td>
+                                
+                            </tr>
+                            <tr>
+                                <th style="border: 1px solid #ffffff;">Fitment Date </th>
+                                <td style="border: 1px solid #ffffff;" class="installationDate"></td>
+                                
+                            </tr>
+                            <tr>
+                                <th style="border: 1px solid #ffffff;">Next Calibration Date</th>
+                                <td style="border: 1px solid #ffffff;" class="renewalDate"></td>
+                                
+                            </tr>
+                        </table>
+            
+                    </div>
+                </div>
+            </div>
+
+            <p>This is to certify that the Electronics Speed Limiting device/Speed Governor fitted as per the details given below. It is checked, sealed and is functioning in all manners.</p>
+            <p><strong>Vehicle Details:-</strong><br>
+                Vehicle No.: <strong><span class="regNo"></span></strong> 
+                Type of Vehicle : <strong><span class="vechType"></span></strong>  
+                Registration Date : <strong><span class="regdate"></span></strong> 
+                Chassis No : <strong><span class="chassisNo"></span></strong> 
+                (Make) : <strong><span class="maker"></span></strong> 
+                Date of mfg, Year : <strong><span class="mfgYear"></span></strong> 
+                Engine No: <strong><span class="engineNo"></span></strong> 
+                Vehicle (Model) : <strong><span class="makeModel"></span></strong> 
+                Last Fitness Date:<strong><span class="installationDate"></span></strong></p>
+            <p><strong>Vehicle Owner Details:-</strong> <br> 
+                Owner Name : <strong><span class="customerName"></span></strong> 
+                 Owner Address: <strong><span class="address"></span></strong></p>
+            <p><strong>Dealer Details:-</strong><br>
+                Dealer Name: CONTAINE TECHNOLOGIES  LIMITED
+                Dealer Address: 3-13-142/341P,342,GOKUL NAGAR, MALLAPUR, HYDERABAD 500076.</p>
+            <p style="margin-bottom: 3px;"><strong>Speed Governor Details:-</strong></p>
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tr>
+                    <th style="width: 15%; ">SG Serial No</th>
+                    <td style="width: 17%; ">  <span class="sldNo"></span></td>
+                    <th style="width: 15%; ">Fitment Date</th>
+                    <td style="width: 17%; " > <span class="installationDate"></span></td>
+                    <th style="width: 15%; ">Manufacturer</th>
+                    <td style="width: 17%; " > Containe Technologies Limited</td>
+                </tr>
+                <tr>
+                    <th >SG Type</th>
+                    <td  > <span >ELECTRONIC</span></td>
+                    <th >TAC No.</th>
+                    <td  > <span >AA1835</span></td>
+                    <th >Report No.</th>
+                    <td > <span >SHL/295/2011-2012/1124/1025</span></td>
+                </tr>
+                <tr>
+                    <th >Fitment Certificate No</th>
+                    <td  > <span class="fitmentcerti"></span></td>
+                    <th >Invoice No.</th>
+                    <td  > <span class="invoiceNo"></span></td>
+                    <th >Pre set Max Speed</th>
+                    <td  > <span class="setSpeed"></span></td>
+                </tr>
+                <tr>
+                    <th >SG Model</th>
+                    <td  > <span >CTZESGM09</span></td>
+                    <th >Invoice Date</th>
+                    <td  > <span class="dated"></span></td>
+                    <th >COP Date</th>
+                    <td  > <span class="copDate"></span></td>
+                </tr>
+                <tr>
+                    <th>Seal No.</th>
+                    <td ><span >0</span></td>
+                    <th >Report Date</th>
+                    <td ><span class="reportDate"></span></td>
+                    <th >Testing Agency</th>
+                    <td ><span >ARAI</span></td>
+                </tr>
+            </table>
+            
+            
+            <p style="margin-top: 10px;margin-bottom: 3px;"><strong>Speed Governor Details:-</strong></p>
+            <table border="1" style="width: 100%; height: 150px; border-collapse: collapse; text-align: left;">
+                <tr>
+                    <th style="width: 15%; vertical-align: top; padding: 5px;">
+                        REGISTRATION CERTIFICATE : <br>
+                        <div class="image-preview" id="previewRC"></div>
+                    </th>
+                    <th style="width: 15%; vertical-align: top; padding: 5px;">
+                        VEHICLE :
+                        <div class="image-preview" id="previewVehicle"></div>
+                    </th>
+                    <th style="width: 15%; vertical-align: top; padding: 5px;">
+                        DEVICE INSTALLATION : <br>
+                        <div class="image-preview" id="previewDevice"></div>
+                    </th>
+                    <th style="width: 15%; vertical-align: top; padding: 5px;">
+                        RTO SEAL & SIGNATURE : <br>
+                        <div class="image-preview" id="previewRTO"></div>
+                    </th>
+                </tr>
+            </table>
+            <p style="font-size: 7pt; font-weight:800;margin-top: 10px; text-align: center;margin-bottom: 0;">PRODUCT SATISFACTION REPORT</p>
+            <p style="margin-bottom: 0;">This is to acknowledge and confirm that we have got our vehicle bearing registration No. <strong><span class="regNo"></span></strong>  Limitation Device manufactured by M/s <strong> Containe Technologies Limited</strong> 
+                Bearing Sr.No.<strong><span class="serialNo"></span></strong> And Batch No <strong><span class="sldNo"></span></strong>. We have checked the performance of the vehicle after fitment of the said Speed Limitation Device and we confirm that the speed of 
+                the vehicle is set to <strong><span class="setSpeed"></span></strong> and the unit is sealed at <strong>EFRT-B ,EFRT-L, EFRT-R, Sensor, FIP, Filter</strong> Points and function in gas per norms laid out in AIS 018.We are satisfied with 
+                the performance of the unit in all respects.</p>
+            <p style="margin-bottom: 0;">We undertake not to raise any dispute or any legal claims against M/s <strong>Containe Technologies Limited</strong> In the event that the above mentioned seals are found broken/torn/tampered and 
+                more specifically with the respect to any variance in the speed limit set at the time of delivery, after expiry of warranty period of 12 months from the date of installation.</p>
+            <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 5px;">
+                <tr>
+                    <th style="width: 3%; ">Date & Time</th>
+                    <td style="width: 20%; "class="p3dateTime"></td>
+                    
+                </tr>
+                <tr>
+                    <th >Name of the Customer</th>
+                    <td  class="customerName"></td>
+                    
+                </tr>
+                <tr>
+                    <th >Address</th>
+                    <td  class="address"></td>
+                    
+                </tr>
+                <tr>
+                    <th >Mobile Number</th>
+                    <td  class="phoneNo"></td>
+                    
+                </tr>
+            </table>
+
+
+
+            <div class="row align-items-end text-center" style="min-height: 100px; margin-top: 30px; ">
+                <div class="col-md-2 d-flex align-items-end justify-content-center">
+                   
+                </div>
+            
+                <div class="col-md-3 d-flex align-items-end justify-content-center">
+                    <p><strong>Dealer Seal & Signature</strong></p>
+                </div>
+            
+                
+                <div class="col-md-3 d-flex align-items-end justify-content-center">
+                    <p><strong>Customer Signature </strong></p>
+                </div>
+            
+                
+                <div class="col-md-4 text-center">
+                    <p>For <strong>Containe Technologies Limited</strong></p>
+                    <div class="d-flex justify-content-right align-items-center gap-3">
+                        <img src="assets\img\ctpl-stamp.png" alt="Stamp" class="stamp-img">
+                        <img src="assets\img\ctpl-sign.png" alt="Signature" class="sign-img">
+                    </div>
+                    <p><strong>Authorised Signature</strong></p>
+                </div>
+            </div>
+            
+        </div>
+
+
+
+        
+        <img src="assets\img\footer.png" class="footer-img" alt="Footer">
+    </div>
+
+    <script>
+        function updateTickCount() {
+            let sections = document.querySelectorAll('.checkbox-container');
+
+            sections.forEach((section, index) => {
+                let checkboxes = section.querySelectorAll('.tick-checkbox');
+                let checkedCount = 0;
+
+                checkboxes.forEach((checkbox, i) => {
+                    // Sync checkboxes across both sections
+                    let otherSection = sections[index === 0 ? 1 : 0]; // Get the other section
+                    let otherCheckbox = otherSection.querySelectorAll('.tick-checkbox')[i];
+                    otherCheckbox.checked = checkbox.checked;
+
+                    // Count checked checkboxes in this section
+                    if (checkbox.checked) checkedCount++;
+                });
+
+                // Update tick count for this section
+                document.getElementById(`tickCount${index + 1}`).textContent = checkedCount;
+            });
+        }
+
+        // Ensure all checkboxes are synced when the page loads
+        window.onload = function () {
+            document.querySelectorAll('.tick-checkbox').forEach(checkbox => {
+                checkbox.addEventListener("change", updateTickCount);
+            });
+        };
+
+
+
+    </script>
+
+</body>
+</html>
