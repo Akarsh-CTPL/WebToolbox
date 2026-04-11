@@ -246,6 +246,19 @@
                     <button class="btn-gen" onclick="generateIMEILabels()">Generate</button>
                 </div>
             </div>
+
+            <div class="label-control-row">
+                <div class="label-info">
+                    <h4>Custom Service Label</h4>
+                    <p>IMEI, ICCID, and Device Serial Sticker for old devices</p>
+                </div>
+                <div class="input-group-custom">
+                    <input type="number" id="v3_imei" class="input-box" placeholder="IMEI">
+                    <input type="number" id="v3_iccid" class="input-box" placeholder="ICCID">
+                    <input type="text" id="v3_srno" class="input-box" placeholder="SR NO">
+                    <button class="btn-gen" onclick="generateV3Label()"><i class="bi bi-qr-code"></i> Generate</button>
+                </div>
+            </div>
         </div>
 
         <div class="zone-container" style="border-style: dashed;">
@@ -338,6 +351,40 @@
                 pdf.setFont("helvetica", "bold").setFontSize(10).text(txt[0], 87/2, 8, { align: 'center' }).text(txt[1], 87/2, 13, { align: 'center' });
             });
             pdf.save('Approval_Labels.pdf');
+        }
+
+        async function generateV3Label() {
+            // Get values or set to "null" if empty
+            const imei = document.getElementById("v3_imei").value.trim() || "null";
+            const iccid = document.getElementById("v3_iccid").value.trim() || "null";
+            const srno = document.getElementById("v3_srno").value.trim() || "null";
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [87, 19] });
+
+            // QR Code content: combines details with "null" for missing values
+            const qrContent = `IMEI:${imei}\nICCID:${iccid}\nSRNO:${srno}`;
+            const canvas = document.createElement("canvas");
+            
+            // Generate QR
+            await QRCode.toCanvas(canvas, qrContent, { margin: 1, width: 120 });
+            const qrDataUrl = canvas.toDataURL("image/png");
+
+            // PDF Formatting
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(10);
+
+            // Draw the text lines
+            pdf.text(`IMEI  : ${imei}`, 5, 6);
+            pdf.text(`ICCID : ${iccid}`, 5, 11);
+            pdf.text(`SR NO : ${srno}`, 5, 16);
+
+            // Draw the QR Code
+            pdf.addImage(qrDataUrl, "PNG", 65, 1, 17, 17);
+
+            // Save using SR NO or "unnamed" if null
+            const fileName = srno !== "null" ? srno : "Label_Null";
+            pdf.save(`V3_${fileName}.pdf`);
         }
 
         async function generateCustomLabels() {
