@@ -231,6 +231,44 @@
             </div>
         </div>
 
+        <div class="zone-container" style="border-style: dashed;">
+            <div class="zone-header">
+                <i class="bi bi-gear-wide-connected" ></i>
+                <h2>Universal Pattern Generator</h2>
+            </div>
+            
+            <div class="label-control-row">
+                <div class="label-info">
+                    <h4>Custom Sequence Pattern</h4>
+                    <p>Pattern: [Prefix] + [Serial] + [Suffix]</p>
+                    
+                    <div class="mt-2 d-flex align-items-center gap-2">
+                        <span class="small fw-bold text-muted">VOLTAGE:</span>
+                        <select id="univ_voltage" class="input-box" style="width: 100px; height: 30px; padding: 2px; font-size: 12px;">
+                            <option value="24">24V</option>
+                            <option value="12">12V</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group-custom">
+                    <input type="text" id="univ_prefix" class="input-box" style="width: 200px;" placeholder="Prefix">
+                    
+                    <div class="d-flex align-items-center gap-1">
+                        <input type="number" id="univ_from" class="input-box" style="width: 100px;" placeholder="From">
+                        <i class="bi bi-arrow-right text-muted"></i>
+                        <input type="number" id="univ_to" class="input-box" style="width: 100px;" placeholder="To">
+                    </div>
+
+                    <input type="text" id="univ_suffix" class="input-box" style="width: 90px;" placeholder="Suffix"> 
+                    
+                    <button class="btn-gen w-100 mt-2"  onclick="genUniversalLabel()">
+                        <i class="bi bi-printer-fill"></i> GENERATE BATCH
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="zone-container">
             <div class="zone-header">
                 <i class="bi bi-qr-code"></i>
@@ -328,6 +366,34 @@
                 pdf.addImage(canvas.toDataURL("image/png"), "PNG", 65, 0.5, 17, 17);
             }
             pdf.save(`MTL_${voltage}V_${from}_to_${to}.pdf`);
+        }
+
+        async function genUniversalLabel() {
+            const prefix = document.getElementById("univ_prefix").value.trim();
+            const from = parseInt(document.getElementById("univ_from").value);
+            const to = parseInt(document.getElementById("univ_to").value);
+            const suffix = document.getElementById("univ_suffix").value.trim();
+            const voltage = document.getElementById("univ_voltage").value;
+
+            if (!prefix || isNaN(from) || isNaN(to) || from > to) {
+                return alert("Please enter Prefix and valid Serial Range");
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [87, 19] });
+            
+            // Detect model type based on prefix
+            let partNo = prefix.toUpperCase().includes("MTL") ? "MTL01" : "ETL01";
+            const partLine = `Part No. : ${partNo}      Voltage: ${voltage} Volts`;
+
+            for (let i = from; i <= to; i++) {
+                if (i > from) pdf.addPage();
+                const serial = String(i).padStart(5, '0');
+                const sldNo = `${prefix}${serial}${suffix}`;
+                await drawStandardLabel(pdf, sldNo, partLine);
+            }
+            
+            pdf.save(`Custom_${prefix}_${from}_to_${to}.pdf`);
         }
 
         async function generateIMEILabels() {
