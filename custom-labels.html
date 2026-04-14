@@ -231,10 +231,10 @@
             </div>
         </div>
 
-        <div class="zone-container" style="border-style: dashed;">
+        <div class="zone-container" style="border-style: dashed; ">
             <div class="zone-header">
                 <i class="bi bi-gear-wide-connected" ></i>
-                <h2>Universal Pattern Generator</h2>
+                <h2 >Universal Pattern Generator</h2>
             </div>
             
             <div class="label-control-row">
@@ -242,12 +242,22 @@
                     <h4>Custom Sequence Pattern</h4>
                     <p>Pattern: [Prefix] + [Serial] + [Suffix]</p>
                     
-                    <div class="mt-2 d-flex align-items-center gap-2">
-                        <span class="small fw-bold text-muted">VOLTAGE:</span>
-                        <select id="univ_voltage" class="input-box" style="width: 100px; height: 30px; padding: 2px; font-size: 12px;">
-                            <option value="24">24V</option>
-                            <option value="12">12V</option>
-                        </select>
+                    <div class="mt-2 d-flex flex-wrap align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small fw-bold text-muted">MODEL:</span>
+                            <select id="univ_partno" class="input-box" style="width: 130px; height: 30px; padding: 2px; font-size: 12px; ">
+                                <option value="ETL01">ETL Standard</option>
+                                <option value="ETL01-IZ">ETL - IZ</option>
+                                <option value="MTL01">MTL Series</option>
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small fw-bold text-muted">POWER:</span>
+                            <select id="univ_voltage" class="input-box" style="width: 80px; height: 30px; padding: 2px; font-size: 12px; ">
+                                <option value="24">24V</option>
+                                <option value="12">12V</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -260,9 +270,9 @@
                         <input type="number" id="univ_to" class="input-box" style="width: 100px;" placeholder="To">
                     </div>
 
-                    <input type="text" id="univ_suffix" class="input-box" style="width: 90px;" placeholder="Suffix"> 
+                    <input type="text" id="univ_suffix" class="input-box" style="width: 120px;" placeholder="Suffix (Opt)"> 
                     
-                    <button class="btn-gen w-100 mt-2"  onclick="genUniversalLabel()">
+                    <button class="btn-gen w-100 mt-2" onclick="genUniversalLabel()">
                         <i class="bi bi-printer-fill"></i> GENERATE BATCH
                     </button>
                 </div>
@@ -316,6 +326,12 @@
 
     <script>
         const pad = (num, size) => String(num).padStart(size, '0');
+
+        window.onload = function() {
+            if(localStorage.getItem('saved_prefix')) {
+                document.getElementById('univ_prefix').value = localStorage.getItem('saved_prefix');
+            }
+        };
 
         async function genETL(type, voltage) {
             const { jsPDF } = window.jspdf;
@@ -372,28 +388,52 @@
             const prefix = document.getElementById("univ_prefix").value.trim();
             const from = parseInt(document.getElementById("univ_from").value);
             const to = parseInt(document.getElementById("univ_to").value);
-            const suffix = document.getElementById("univ_suffix").value.trim();
+            const suffix = document.getElementById("univ_suffix").value.trim(); 
             const voltage = document.getElementById("univ_voltage").value;
+            const partNo = document.getElementById("univ_partno").value;
 
             if (!prefix || isNaN(from) || isNaN(to) || from > to) {
                 return alert("Please enter Prefix and valid Serial Range");
             }
 
+            // Save prefix for next time
+            localStorage.setItem('saved_prefix', prefix);
+
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [87, 19] });
-            
-            // Detect model type based on prefix
-            let partNo = prefix.toUpperCase().includes("MTL") ? "MTL01" : "ETL01";
-            const partLine = `Part No. : ${partNo}      Voltage: ${voltage} Volts`;
 
             for (let i = from; i <= to; i++) {
                 if (i > from) pdf.addPage();
+                
                 const serial = String(i).padStart(5, '0');
-                const sldNo = `${prefix}${serial}${suffix}`;
-                await drawStandardLabel(pdf, sldNo, partLine);
+                const fullSerial = `${prefix}${serial}${suffix}`;
+                
+                if (partNo === "MTL01") {
+                    // MTL TEMPLATE logic
+                    const lines = [
+                        "Rontom Automotive Ltd.",
+                        `Speed limiting Device (MTL01 - ${voltage}V)`,
+                        `Part No. : MTL01      Voltage: ${voltage} Volts`,
+                        `SLD No. ${fullSerial}`
+                    ];
+                    const qrText = lines.join("\n");
+                    const canvas = document.createElement("canvas");
+                    await QRCode.toCanvas(canvas, qrText);
+                    
+                    pdf.setFont("helvetica", "bold").setFontSize(8).text(lines[0], 4, 4);
+                    pdf.setFontSize(7);
+                    pdf.text(lines[1], 4, 7);
+                    pdf.text(lines[2], 4, 10);
+                    pdf.text(lines[3], 4, 13);
+                    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 65, 0.5, 17, 17);
+                } else {
+                    // ETL TEMPLATE (Works for ETL01 and ETL01-IZ)
+                    const partLine = `Part No. : ${partNo}      Voltage: ${voltage} Volts`;
+                    await drawStandardLabel(pdf, fullSerial, partLine);
+                }
             }
             
-            pdf.save(`Custom_${prefix}_${from}_to_${to}.pdf`);
+            pdf.save(`Custom_${partNo}_${from}_to_${to}.pdf`);
         }
 
         async function generateIMEILabels() {
