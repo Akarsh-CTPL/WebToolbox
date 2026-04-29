@@ -279,6 +279,35 @@
             </div>
         </div>
 
+        <div class="zone-container" >
+            <div class="zone-header">
+                <i class="bi bi-eye" ></i>
+                <h2 >MotorEye SLD Zone (Pre-printed)</h2>
+            </div>
+            <div class="label-control-row">
+                <div class="label-info">
+                    <h4>MotorEye SLD</h4>
+                    <p>Size: 84 x 83 mm | Optimized for Pre-printed labels</p>
+                    <div class="mt-2 d-flex flex-wrap gap-2">
+                        <input type="text" id="me_prefix" class="input-box" style="width: 100px;" placeholder="Prefix">
+                        <input type="text" id="me_suffix" class="input-box" style="width: 80px;" placeholder="Suffix">
+                        <select id="me_voltage" class="input-box" style="width: 80px;">
+                            <option value="12V">12V</option>
+                            <option value="24V">24V</option>
+                        </select>
+                        <input type="number" id="me_pad" class="input-box" style="width: 90px;" placeholder="Padding (e.g. 5)" value="5">
+                    </div>
+                </div>
+                <div class="input-group-custom">
+                    <input type="number" id="me_from" class="input-box" placeholder="From">
+                    <input type="number" id="me_to" class="input-box" placeholder="To">
+                    <button class="btn-gen" onclick="genMotorEye()">
+                        <i class="bi bi-printer"></i> Generate MotorEye
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="zone-container">
             <div class="zone-header">
                 <i class="bi bi-qr-code"></i>
@@ -364,6 +393,52 @@
             pdf.addImage(canvas.toDataURL("image/png"), "PNG", 65, 0.5, 17, 17);
         }
 
+        async function genMotorEye() {
+            const { jsPDF } = window.jspdf;
+            
+            // Get Inputs
+            const prefix = document.getElementById("me_prefix").value.trim();
+            const suffix = document.getElementById("me_suffix").value.trim();
+            const from = parseInt(document.getElementById("me_from").value);
+            const to = parseInt(document.getElementById("me_to").value);
+            const voltage = document.getElementById("me_voltage").value;
+            const padding = parseInt(document.getElementById("me_pad").value) || 0;
+
+            if (isNaN(from) || isNaN(to) || from > to) return alert("Invalid Range");
+
+            // Initialize PDF: [Width, Height] in mm
+            // Note: 84x83mm is a nearly square format
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: [84, 83]
+            });
+
+            // Conversion: jsPDF units are mm. 
+            // To match your "px" request: 30px is ~8mm, 50px is ~13.2mm
+            const leftMargin = 22; // approx 30px
+            const topMargin = 55.5; // approx 50px
+
+            for (let i = from; i <= to; i++) {
+                if (i > from) pdf.addPage();
+
+                // Handle Padding (Leading Zeros)
+                const serialStr = String(i).padStart(padding, '0');
+                const fullSldNo = `${prefix}${serialStr}${suffix}`;
+
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(6);
+
+                // Print SLD No.
+                pdf.text(`${fullSldNo}`, leftMargin, topMargin);
+                
+                // Print Voltage (5mm below the SLD No)
+                pdf.setFontSize(10);
+                pdf.text(`${voltage}`, leftMargin, topMargin + 7);
+            }
+
+            pdf.save(`MotorEye_Labels_${from}_to_${to}.pdf`);
+        }
         async function generateMTLLabels(voltage) {
             const { jsPDF } = window.jspdf;
             const from = parseInt(document.getElementById(`fromMTL${voltage}`).value);
