@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSIM Validity Checker | Web Toolbox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-purple: #4e2d87;
+            --light-purple: #f0e7ff;
+            --bg-gray: #f8f9fa;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: #333;
+        }
+
+        .curved {
+            width: 100%;
+            background: var(--primary-purple);
+            color: white; 
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .container-main {
+            max-width: 900px;
+            margin: 10px auto 60px;
+            padding: 0 15px;
+        }
+
+        .zone-container {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 4px solid var(--primary-purple);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .zone-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--light-purple);
+            padding-bottom: 15px;
+        }
+
+        .zone-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .zone-header i { font-size: 28px; color: var(--primary-purple); }
+
+        .zone-header h2 {
+            font-weight: 800;
+            margin: 0;
+            font-size: 21px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-panel-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            background: var(--bg-gray);
+            transition: 0.2s;
+            flex-wrap: wrap;
+        }
+
+        .input-box {
+            flex: 1;
+            min-width: 280px;
+            padding: 11px 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-box:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(78, 45, 135, 0.15);
+        }
+
+        .btn-action {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover { background: #3a2166; transform: scale(1.02); }
+        .btn-action:disabled { opacity: 0.6; pointer-events: none; }
+
+        .message-banner {
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            display: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .message-banner.error { background: #fee2e2; color: #991b1b; display: block; border-left: 4px solid #ef4444; }
+        .message-banner.success { background: #dcfce7; color: #166534; display: block; border-left: 4px solid #22c55e; }
+
+        .result-card { display: none; }
+
+        .section-heading {
+            margin-top: 24px;
+            margin-bottom: 14px;
+            color: var(--primary-purple);
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .data-field {
+            background: #fdfcff;
+            border: 1px solid #e2dbf0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+
+        .data-field:hover { background: #faf8ff; border-color: #d1c4e9; }
+
+        .data-field label {
+            display: block;
+            color: #7c6e94;
+            font-size: 11px;
+            margin-bottom: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-field span {
+            color: #1a0833;
+            font-size: 15px;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .status-pill {
+            padding: 6px 14px;
+            border-radius: 50px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid #a5d6a7;
+        }
+
+        .raw-box {
+            background: #0d0614;
+            color: #e9e3f0;
+            padding: 18px;
+            border-radius: 14px;
+            overflow-x: auto;
+            font-size: 12px;
+            display: none;
+            border: 1px solid #2d1842;
+            font-family: monospace;
+        }
+
+        .btn-raw-toggle {
+            margin-top: 20px;
+            background: transparent;
+            color: #666;
+            border: 2px dashed #ccc;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .btn-raw-toggle:hover { border-color: var(--primary-purple); color: var(--primary-purple); background: #faf8ff; }
+
+        .back-link { display: block; text-align: center; margin-top: 25px; color: #888; text-decoration: none; font-weight: 600; }
+        .back-link:hover { color: var(--primary-purple); }
+
+        @media (max-width: 768px) {
+            .control-panel-row { flex-direction: column; }
+            .input-box, .btn-action { width: 100%; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="curved">                                     
+        <h2 style="font-weight: 800;">eSIM Verification Center</h2>               
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1430 80">
+            <path fill="#f8f9fa" d="M-1,35 C120,50,240,30,360,40 C480,50,600,30,720,40 C840,50,960,30,1080,40 C1200,50,1320,30,1440,35L1440,83L0,83Z"></path>
+        </svg>
+    </div>
+
+    <div class="container-main">
+
+        <div class="zone-container">
+            <div class="zone-header" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                <div class="zone-title-group">
+                    <i class="bi bi-sim"></i>
+                    <h2>Vahan Network Synchronization</h2>
+                </div>
+            </div>
+            <p class="text-muted small mb-4">Validate physical profile settings, allocation lifecycle data, and operational states across target gateway systems.</p>
+
+            <div class="control-panel-row">
+                <input
+                  type="text"
+                  id="iccidInput"
+                  class="input-box"
+                  placeholder="Enter 20-digit ICCID number"
+                  maxlength="30"
+                />
+                <button id="submitBtn" class="btn-action" onclick="checkEsimValidity()">
+                  <i class="bi bi-patch-check"></i> Verify SIM
+                </button>
+            </div>
+            <div id="messageBox" class="message-banner"></div>
+        </div>
+
+        <div id="resultCard" class="zone-container result-card">
+            <div class="zone-header">
+                <div class="zone-title-group">
+                    <i class="bi bi-clipboard-data" style="font-size: 24px;"></i>
+                    <h2 style="font-size: 18px;">Profile Diagnostics</h2>
+                </div>
+                <div id="mainStatusBadge" class="status-pill">Unknown</div>
+            </div>
+
+            <div class="section-heading">Basic Attributes</div>
+            <div class="data-grid">
+                <div class="data-field"><label>ICCID Identification</label><span id="iccid">-</span></div>
+                <div class="data-field"><label>Card Operation State</label><span id="cardState">-</span></div>
+                <div class="data-field"><label>Network Card Status</label><span id="cardStatus">-</span></div>
+                <div class="data-field"><label>Activation Timestamp</label><span id="activateOn">-</span></div>
+                <div class="data-field"><label>Expiration Timestamp</label><span id="expiredOn">-</span></div>
+                <div class="data-field"><label>Aggregated Data Volume</label><span id="dataUsage">-</span></div>
+                <div class="data-field"><label>Data Validation Date</label><span id="dataUsageDate">-</span></div>
+            </div>
+
+            <div class="section-heading">Primary Telecommunications Provider</div>
+            <div class="data-grid">
+                <div class="data-field"><label>Primary Carrier Name</label><span id="primaryTSP">-</span></div>
+                <div class="data-field"><label>Primary MSISDN (Mobile Number)</label><span id="primaryMSISDN">-</span></div>
+                <div class="data-field"><label>Primary Node Status</label><span id="primaryStatus">-</span></div>
+            </div>
+
+            <div class="section-heading">Fallback Telecommunications Provider</div>
+            <div class="data-grid">
+                <div class="data-field"><label>Fallback Carrier Name</label><span id="fallbackTSP">-</span></div>
+                <div class="data-field"><label>Fallback MSISDN (Mobile Number)</label><span id="fallbackMSISDN">-</span></div>
+                <div class="data-field"><label>Fallback Node Status</label><span id="fallbackStatus">-</span></div>
+            </div>
+
+            <button class="btn-raw-toggle" onclick="toggleRawResponse()">
+                <i class="bi bi-braces"></i> Toggle Raw API Transmission Logs
+            </button>
+            <pre id="rawResponse" class="raw-box mt-3"></pre>
+        </div>
+
+        <a href="index.html" class="back-link"><i class="bi bi-arrow-left"></i> Back to Toolbox</a>
+    </div>
+
+    <script>
+        const API_URL = "https://web.tranopro.com/api/ESIMAllocation/CheckCtplEsimValidity";
+        const OBFUSCATED_KEY = "==wN2gDN1QDd6p1c4cHSxRzVSVDUjlkRi92dFdWZz8EcNhHOKdGMN92YX9WZzh2QUFkNkdza5VkeuF0U6dWeahmN";
+
+        function getSecretKey() {
+            return atob(OBFUSCATED_KEY.split("").reverse().join(""));
+        }
+
+        async function checkEsimValidity() {
+            const iccidInput = document.getElementById("iccidInput");
+            const submitBtn = document.getElementById("submitBtn");
+            const messageBox = document.getElementById("messageBox");
+            const resultCard = document.getElementById("resultCard");
+
+            const iccid = iccidInput.value.trim();
+            clearMessage();
+            resultCard.style.display = "none";
+
+            if (!iccid) {
+                showMessage("Transaction Terminated: Please specify an ICCID string.", "error");
+                return;
+            }
+
+            if (!/^[0-9]+$/.test(iccid)) {
+                showMessage("Parsing Exception: Target ICCID context must consist solely of numeric sequences.", "error");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        k1: getSecretKey(),
+                        k2: iccid
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("HTTP Handshake Failure: Status code " + response.status);
+                }
+
+                const data = await response.json();
+
+                if (!data || !data.resultObj) {
+                    showMessage(data?.apiResponseMsg || "Record Vacant: No structural object matches this query identifier.", "error");
+                    return;
+                }
+
+                bindResult(data);
+                showMessage(data.apiResponseMsg || "Identity validation executed successfully.", "success");
+
+            } catch (error) {
+                console.error("Diagnostic Log:", error);
+                showMessage("Network Interruption: Request could not terminate natively due to routing, active CORS filters, or node down times.", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="bi bi-patch-check"></i> Verify SIM`;
+            }
+        }
+
+        function bindResult(apiResponse) {
+            const result = apiResponse.resultObj;
+            document.getElementById("resultCard").style.display = "block";
+
+            setText("iccid", result.iccid);
+            setText("cardState", result.cardState);
+            setText("cardStatus", result.cardStatus);
+            setText("activateOn", result.activateOn);
+            setText("expiredOn", result.expiredOn);
+            setText("dataUsage", result.dataUsage);
+            setText("dataUsageDate", result.dataUsageDate);
+
+            setText("primaryTSP", result.primaryTSP);
+            setText("primaryMSISDN", result.primaryMSISDN);
+            setText("primaryStatus", result.primaryStatus);
+
+            setText("fallbackTSP", result.fallbackTSP);
+            setText("fallbackMSISDN", result.fallbackMSISDN);
+            setText("fallbackStatus", result.fallbackStatus);
+
+            const badgeElement = document.getElementById("mainStatusBadge");
+            const statusString = result.cardStatus || "SUCCESS";
+            badgeElement.innerText = statusString;
+
+            // Simple conditional badge coloration based on card output value
+            if (statusString.toUpperCase() === "ACTIVE" || statusString.toUpperCase() === "SUCCESS") {
+                badgeElement.style.background = "#e8f5e9";
+                badgeElement.style.color = "#2e7d32";
+                badgeElement.style.borderColor = "#a5d6a7";
+            } else {
+                badgeElement.style.background = "#fff3e0";
+                badgeElement.style.color = "#e65100";
+                badgeElement.style.borderColor = "#ffcc80";
+            }
+
+            document.getElementById("rawResponse").innerText = JSON.stringify(apiResponse, null, 2);
+        }
+
+        function setText(id, value) {
+            document.getElementById(id).innerText = value && value !== "NULL" ? value : "-";
+        }
+
+        let currentStatusClass = "";
+        function showMessage(message, type) {
+            const messageBox = document.getElementById("messageBox");
+            messageBox.innerText = message;
+            messageBox.className = "message-banner " + type;
+        }
+
+        function clearMessage() {
+            const messageBox = document.getElementById("messageBox");
+            messageBox.innerText = "";
+            messageBox.className = "message-banner";
+        }
+
+        function toggleRawResponse() {
+            const rawBox = document.getElementById("rawResponse");
+            rawBox.style.display = rawBox.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</body>
+</html>
