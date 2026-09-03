@@ -308,6 +308,48 @@
             </div>
         </div>
 
+
+        <div class="zone-container">
+            <div class="zone-header">
+                <i class="bi bi-car-front"></i>
+                <h2>OBD CAN Label Zone</h2>
+            </div>
+            <div class="label-control-row">
+                <div class="label-info">
+                    <h4>OBD CAN</h4>
+                    <p>Format: RTA/CAN/ETL01-AB001 | Text width limited to 4 cm</p>
+                </div>
+                <div class="input-group-custom">
+                    <input type="text" id="obd_can_code" class="input-box" style="width: 90px;" placeholder="AB" maxlength="2">
+                    <input type="number" id="obd_can_from" class="input-box" placeholder="From" min="1" max="999">
+                    <input type="number" id="obd_can_to" class="input-box" placeholder="To" min="1" max="999">
+                    <button class="btn-gen" onclick="generateOBDCANLabels()"><i class="bi bi-file-earmark-pdf"></i> Generate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zone-container">
+            <div class="zone-header">
+                <i class="bi bi-upc-scan"></i>
+                <h2>BOX Label Zone</h2>
+            </div>
+            <div class="label-control-row">
+                <div class="label-info">
+                    <h4>CBX Sequence Label</h4>
+                    <p>Format: [Editable Code]-[DD]-[MM]-[YYYY]-[Sequence]</p>
+                </div>
+                <div class="input-group-custom">
+                    <input type="text" id="cbx_prefix" class="input-box" style="width: 160px;" value="CT-CBX-0" placeholder="CT-CBX-0">
+                    <input type="date" id="cbx_date" class="input-box" style="width: 165px;">
+                    <input type="number" id="cbx_from" class="input-box" style="width: 100px;" placeholder="From" min="1" max="99">
+                    <input type="number" id="cbx_to" class="input-box" style="width: 100px;" placeholder="To" min="1" max="99">
+                    <button class="btn-gen" onclick="generateCBXLabels()">
+                        <i class="bi bi-file-earmark-pdf"></i> Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="zone-container">
             <div class="zone-header">
                 <i class="bi bi-qr-code"></i>
@@ -439,7 +481,7 @@
 
             pdf.save(`MotorEye_Labels_${from}_to_${to}.pdf`);
         }
-        async function generateMTLLabels(voltage) {
+        async function generateMTLLabels(   ) {
             const { jsPDF } = window.jspdf;
             const from = parseInt(document.getElementById(`fromMTL${voltage}`).value);
             const to = parseInt(document.getElementById(`toMTL${voltage}`).value);
@@ -509,6 +551,107 @@
             }
             
             pdf.save(`Custom_${partNo}_${from}_to_${to}.pdf`);
+        }
+
+
+        async function generateOBDCANLabels() {
+            const code = document.getElementById("obd_can_code").value.trim().toUpperCase();
+            const from = parseInt(document.getElementById("obd_can_from").value);
+            const to = parseInt(document.getElementById("obd_can_to").value);
+
+            if (!/^[A-Z]{2}$/.test(code)) return alert("Enter a 2-letter code, for example AB");
+            if (isNaN(from) || isNaN(to) || from > to || from < 1 || to > 999) return alert("Enter a valid range from 1 to 999");
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [87, 19] });
+
+            // 4 cm = 40 mm ≈ 151 px at 96 DPI.
+            // jsPDF is using millimetres, so 40 mm is enforced directly for print accuracy.
+            const maxTextWidthMm = 40;
+            const leftX = 4;
+
+            const fitTextToWidth = (text, startFontSize) => {
+                let fontSize = startFontSize;
+                pdf.setFontSize(fontSize);
+                while (pdf.getTextWidth(text) > maxTextWidthMm && fontSize > 4) {
+                    fontSize -= 0.25;
+                    pdf.setFontSize(fontSize);
+                }
+            };
+
+            for (let i = from; i <= to; i++) {
+                if (i > from) pdf.addPage();
+
+                const serial = String(i).padStart(3, '0');
+                const line1 = `RTA/CAN/ETL01-${code}${serial}`;
+                const line2 = `(E57*89R00/02*0235)`;
+
+                pdf.setFont("helvetica", "bold");
+
+                fitTextToWidth(line1, 11);
+                pdf.text(line1, leftX, 8);
+
+                fitTextToWidth(line2, 11);
+                pdf.text(line2, leftX, 14);
+            }
+
+            pdf.save(`OBD_CAN_${code}_${from}_to_${to}.pdf`);
+        }
+
+        async function generateCBXLabels() {
+            const prefix = document.getElementById("cbx_prefix").value.trim();
+            const dateValue = document.getElementById("cbx_date").value;
+            const from = parseInt(document.getElementById("cbx_from").value);
+            const to = parseInt(document.getElementById("cbx_to").value);
+
+            if (!prefix) return alert("Enter the code, for example CT-CBX-0");
+            if (!dateValue) return alert("Choose a date");
+            if (isNaN(from) || isNaN(to) || from > to || from < 1 || to > 99) {
+                return alert("Enter a valid sequence range from 1 to 99");
+            }
+
+            // HTML date input gives YYYY-MM-DD. Split it directly so timezone
+            // conversion cannot accidentally change the selected day.
+            const [year, month, day] = dateValue.split("-");
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: [87, 19]
+            });
+
+            // Use almost the full physical label width.
+            const leftX = 2;
+            const maxTextWidthMm = 83;
+
+            const fitCBXText = (text) => {
+                let fontSize = 40;
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(fontSize);
+
+                while (pdf.getTextWidth(text) > maxTextWidthMm && fontSize > 6) {
+                    fontSize -= 0.25;
+                    pdf.setFontSize(fontSize);
+                }
+
+                return fontSize;
+            };
+
+            for (let i = from; i <= to; i++) {
+                if (i > from) pdf.addPage();
+
+                // Sequence is intentionally NOT zero-padded: 1, 2 ... 99.
+                const labelText = `${prefix}-${day}-${month}-${year}-${i}`;
+
+                fitCBXText(labelText);
+
+                // Only this one line is printed on the label.
+                // Left aligned and vertically placed to use the label height well.
+                pdf.text(labelText, leftX, 12.5);
+            }
+
+            pdf.save(`CBX_${day}-${month}-${year}_${from}_to_${to}.pdf`);
         }
 
         async function generateIMEILabels() {
